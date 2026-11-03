@@ -3,18 +3,28 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import {
+  Navbar,
+  NavBody,
+  NavItems,
+  MobileNav,
+  NavbarLogo,
+  NavbarButton,
+  MobileNavHeader,
+  MobileNavToggle,
+  MobileNavMenu,
+} from "@/components/ui/resizable-navbar";
 
-const links = [
-  { label: "Home", href: "/", key: "home" },
-  { label: "About", href: "/#about", key: "about" },
-  { label: "Events", href: "/events", key: "events" },
-  { label: "Moments & Milestones", href: "/moments-and-milestones", key: "moments" },
-  { label: "Team", href: "/team", key: "team" },
+const navItems = [
+  { name: "Home", link: "/" },
+  { name: "About", link: "/#about" },
+  { name: "Events", link: "/events" },
+  { name: "Moments & Milestones", link: "/moments-and-milestones" },
+  { name: "Team", link: "/team" },
 ];
 
-export default function Navbar() {
-  const [open, setOpen] = useState(false);
+export default function AppNavbar() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hash, setHash] = useState("");
   const pathname = usePathname();
 
@@ -29,40 +39,130 @@ export default function Navbar() {
     };
   }, [pathname]);
 
-  const activeKey = pathname === "/events" ? "events"
-    : pathname === "/moments-and-milestones" || pathname === "/recent-news" ? "moments"
-    : pathname === "/team" ? "team"
-    : pathname === "/" && hash === "#about" ? "about"
-    : "home";
+  const isLinkActive = (link: string) => {
+    if (link === "/#about") {
+      return pathname === "/" && hash === "#about";
+    }
+    if (link === "/") {
+      return pathname === "/" && hash !== "#about";
+    }
+    if (link === "/moments-and-milestones") {
+      return pathname === "/moments-and-milestones" || pathname === "/recent-news";
+    }
+    if (link === "/team") {
+      return pathname === "/team" || pathname.startsWith("/team/");
+    }
+    if (link === "/events") {
+      return pathname === "/events" || pathname.startsWith("/events/");
+    }
+    return pathname === link;
+  };
 
-  const renderLinks = (className: string) => links.map((link) => (
-    <a
-      key={link.key}
-      className={activeKey === link.key ? "active" : undefined}
-      href={link.href}
-      aria-current={activeKey === link.key ? "page" : undefined}
-      onClick={() => setOpen(false)}
-    >
-      {link.label}
-    </a>
-  ));
+  const currentActiveLink =
+    navItems.find((item) => isLinkActive(item.link))?.link || (pathname === "/" ? "/" : "");
+
+  const handleItemClick = (link: string) => {
+    if (link === "/#about") {
+      setHash("#about");
+    } else if (link === "/") {
+      setHash("");
+    }
+  };
 
   return (
-    <header className="site-header">
-      <nav className="nav section-shell" aria-label="Main navigation">
-        <a className="brand" href="/" aria-label="CSI PVG Chapter home">
-          <span className="brand-logo-wrap"><Image src="/images/csi-final-logo.jpeg" alt="CSI PVG Chapter logo" width={48} height={48} priority className="brand-logo" /></span>
-          <span className="brand-type"><strong>CSI<span>·</span>PVG</strong><small>CHAPTER</small></span>
-        </a>
-        <div className="nav-links">{renderLinks("nav-links")}</div>
-        <button className="mobile-menu-button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen(!open)}>
-          {open ? <X size={21} /> : <Menu size={21} />}
-        </button>
-        <a className="college-brand-logo" href="/" aria-label="PVG College home">
-          <Image src="/images/pvg-college-logo.png" alt="Pune Vidhyarthi Griha logo" width={48} height={48} priority />
-        </a>
-      </nav>
-      {open && <div className="mobile-nav">{renderLinks("mobile-nav")}</div>}
-    </header>
+    <div className="relative w-full pt-1 sm:pt-2">
+      <Navbar>
+        {/* Desktop Navigation */}
+        <NavBody>
+          <NavbarLogo />
+          <NavItems
+            items={navItems}
+            activeLink={currentActiveLink}
+            onItemClick={handleItemClick}
+          />
+          <div className="flex items-center gap-2.5">
+            <a
+              href="/"
+              className="w-8 h-8 rounded-lg overflow-hidden border border-white/20 bg-white flex items-center justify-center shrink-0 hover:border-white/40 transition-colors shadow-sm"
+              title="Pune Vidhyarthi Griha"
+              aria-label="PVG College Home"
+            >
+              <Image
+                src="/images/pvg-college-logo.png"
+                alt="PVG College"
+                width={32}
+                height={32}
+                className="w-full h-full object-contain p-0.5"
+              />
+            </a>
+            <NavbarButton
+              href="https://www.instagram.com/csi_pvg/"
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="gradient"
+            >
+              Join Us
+            </NavbarButton>
+          </div>
+        </NavBody>
+
+        {/* Mobile Navigation */}
+        <MobileNav>
+          <MobileNavHeader>
+            <NavbarLogo />
+            <MobileNavToggle
+              isOpen={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            />
+          </MobileNavHeader>
+
+          <MobileNavMenu
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
+          >
+            {navItems.map((item, idx) => {
+              const isActive = isLinkActive(item.link);
+              return (
+                <a
+                  key={`mobile-link-${idx}`}
+                  href={item.link}
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    handleItemClick(item.link);
+                  }}
+                  className={`w-full py-2.5 px-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-between ${
+                    isActive
+                      ? "bg-white/10 text-white font-semibold"
+                      : "text-neutral-300 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  <span className="relative inline-block">
+                    {item.name}
+                    {isActive && (
+                      <span className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 shadow-[0_0_8px_rgba(56,189,248,0.85)]" />
+                    )}
+                  </span>
+                  {isActive && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.85)]" />
+                  )}
+                </a>
+              );
+            })}
+            <div className="flex w-full flex-col gap-3 mt-3 pt-3 border-t border-white/10">
+              <NavbarButton
+                href="https://www.instagram.com/csi_pvg/"
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="gradient"
+                className="w-full text-center py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Join Us
+              </NavbarButton>
+            </div>
+          </MobileNavMenu>
+        </MobileNav>
+      </Navbar>
+    </div>
   );
 }
