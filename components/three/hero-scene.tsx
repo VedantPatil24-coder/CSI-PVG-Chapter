@@ -10,12 +10,16 @@ const globalPointer = { x: 0, y: 0 };
 
 function useGlobalPointerTracking() {
   useEffect(() => {
-    const updatePointer = (event: PointerEvent) => {
+    const updatePointer = (event: MouseEvent | PointerEvent) => {
       globalPointer.x = (event.clientX / Math.max(window.innerWidth, 1)) * 2 - 1;
       globalPointer.y = -((event.clientY / Math.max(window.innerHeight, 1)) * 2 - 1);
     };
     window.addEventListener("pointermove", updatePointer, { passive: true });
-    return () => window.removeEventListener("pointermove", updatePointer);
+    window.addEventListener("mousemove", updatePointer, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", updatePointer);
+      window.removeEventListener("mousemove", updatePointer);
+    };
   }, []);
 }
 
@@ -25,27 +29,27 @@ function makeScreenTexture() {
   canvas.height = 360;
   const ctx = canvas.getContext("2d");
   if (!ctx) return new THREE.CanvasTexture(canvas);
-  ctx.fillStyle = "#08101c";
+  ctx.fillStyle = "#020712";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  // A restrained phosphor display, not a neon HUD.
-  ctx.fillStyle = "#a9c2f4";
+  // Phosphor cyan display matching cyber theme
+  ctx.fillStyle = "#00f2fe";
   ctx.font = "bold 19px monospace";
-  ctx.fillText("CSI_PVG / SYSTEM 01", 28, 40);
-  ctx.strokeStyle = "rgba(220,226,242,.42)";
+  ctx.fillText("CSI_PVG // SYS.CORE.92A", 28, 40);
+  ctx.strokeStyle = "rgba(0, 242, 254, 0.35)";
   ctx.beginPath();
   ctx.moveTo(28, 56);
   ctx.lineTo(484, 56);
   ctx.stroke();
   ctx.font = "17px monospace";
-  ctx.fillStyle = "#8fa9df";
+  ctx.fillStyle = "#38bdf8";
   ctx.fillText("C:\\> boot chapter.exe", 28, 98);
   ctx.fillText("Loading curiosity...", 28, 139);
   ctx.fillText("[ OK ] tools initialized", 28, 180);
   ctx.fillText("[ OK ] ideas detected", 28, 221);
-  ctx.fillStyle = "#d2e0ff";
+  ctx.fillStyle = "#e0f2fe";
   ctx.fillText("C:\\> build something_", 28, 286);
-  // Subtle CRT scan lines.
-  ctx.fillStyle = "rgba(0,0,0,.16)";
+  // Subtle CRT scan lines
+  ctx.fillStyle = "rgba(0, 0, 0, 0.18)";
   for (let y = 0; y < canvas.height; y += 4) ctx.fillRect(0, y, canvas.width, 1);
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
@@ -90,14 +94,27 @@ function RetroComputer() {
   useFrame((state) => {
     if (!group.current) return;
     const t = state.clock.elapsedTime;
-    // The CRT subtly turns toward the pointer, like it's tracking the visitor.
-    const targetY = -0.16 + globalPointer.x * 0.27 + Math.sin(t * 0.24) * 0.012;
-    const targetX = -0.025 - globalPointer.y * 0.105 + Math.sin(t * 0.32) * 0.006;
-    group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, targetY, 0.075);
-    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, targetX, 0.075);
+
+    // Check if cursor is directly over or near the canvas
+    const isCanvasHovered =
+      Math.abs(state.pointer.x) <= 1.05 &&
+      Math.abs(state.pointer.y) <= 1.05 &&
+      (state.pointer.x !== 0 || state.pointer.y !== 0);
+
+    // Prioritize direct canvas hover, with smooth fallback to global window tracking
+    const px = isCanvasHovered ? state.pointer.x : globalPointer.x;
+    const py = isCanvasHovered ? state.pointer.y : globalPointer.y;
+
+    // Noticeable, responsive head-tracking in the direction of the cursor
+    const targetY = -0.16 + px * 0.45 + Math.sin(t * 0.24) * 0.012;
+    const targetX = -0.025 + py * 0.22 + Math.sin(t * 0.32) * 0.006;
+
+    group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, targetY, 0.085);
+    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, targetX, 0.085);
     group.current.position.y = 0.12 + Math.sin(t * 0.72) * 0.035;
+
     if (disk.current) {
-      disk.current.rotation.y = Math.sin(t * 0.42) * 0.045;
+      disk.current.rotation.y = Math.sin(t * 0.42) * 0.045 + px * 0.06;
       disk.current.position.y = -1.17 + Math.sin(t * 0.9 + 0.7) * 0.025;
     }
     if (screenGlint.current) {
@@ -116,24 +133,24 @@ function RetroComputer() {
       <RoundedBox args={[2.02, 1.49, 0.16]} radius={0.12} smoothness={6} position={[-0.02, 0.17, 0.655]}>
         <meshStandardMaterial color="#aaa18e" roughness={0.78} />
       </RoundedBox>
-      {/* Deep blue phosphor screen, set slightly inside the bezel */}
+      {/* Deep phosphor screen */}
       <mesh position={[-0.02, 0.19, 0.744]} material={screenMaterial}>
         <planeGeometry args={[1.72, 1.13]} />
       </mesh>
-      {/* A restrained screen bloom behind the glass, not a neon halo */}
+      {/* Restrained cyan screen bloom behind the glass */}
       <mesh position={[-0.02, 0.19, 0.738]}>
         <planeGeometry args={[1.78, 1.19]} />
-        <meshBasicMaterial color="#E8EAF2" transparent opacity={0.055} depthWrite={false} />
+        <meshBasicMaterial color="#00f2fe" transparent opacity={0.08} depthWrite={false} />
       </mesh>
-      {/* Faint glass reflection, angled like a studio softbox */}
+      {/* Faint glass reflection */}
       <mesh position={[-0.43, 0.2, 0.752]} rotation={[0, 0, -0.13]}>
         <planeGeometry args={[0.22, 1.04]} />
         <meshBasicMaterial color="#e1eaff" transparent opacity={0.055} depthWrite={false} />
       </mesh>
-      {/* Slow studio-light sweep across the CRT glass */}
+      {/* Studio-light sweep across CRT glass */}
       <mesh ref={screenGlint} position={[-0.78, 0.19, 0.754]}>
         <planeGeometry args={[0.055, 1.02]} />
-        <meshBasicMaterial color="#c9d8ff" transparent opacity={0.11} depthWrite={false} />
+        <meshBasicMaterial color="#00f2fe" transparent opacity={0.12} depthWrite={false} />
       </mesh>
       {/* Screen inner lip */}
       <mesh position={[-0.02, 0.19, 0.75]}>
@@ -147,7 +164,7 @@ function RetroComputer() {
       </mesh>
       <mesh position={[0.72, -0.39, 0.748]}>
         <circleGeometry args={[0.035, 20]} />
-        <meshStandardMaterial color="#E8EAF2" emissive="#E8EAF2" emissiveIntensity={0.35} roughness={0.35} />
+        <meshStandardMaterial color="#00f2fe" emissive="#00f2fe" emissiveIntensity={0.45} roughness={0.35} />
       </mesh>
       <mesh position={[-0.68, -0.56, 0.748]}>
         <boxGeometry args={[0.31, 0.025, 0.012]} />
@@ -190,7 +207,6 @@ function BlueprintFrame() {
   const geometry = useMemo(() => {
     const points: number[] = [];
     const addLine = (a: [number, number, number], b: [number, number, number]) => points.push(...a, ...b);
-    // Offset drafting frame and calibration ticks: more product-studio than sci-fi HUD.
     const z = -1.0;
     addLine([-1.92, 1.72, z], [1.92, 1.72, z]);
     addLine([1.92, 1.72, z], [1.92, -1.38, z]);
@@ -204,9 +220,11 @@ function BlueprintFrame() {
     g.setAttribute("position", new THREE.Float32BufferAttribute(points, 3));
     return g;
   }, []);
-  return <lineSegments geometry={geometry} position={[0, 0, 0]}>
-    <lineBasicMaterial color="#E8EAF2" transparent opacity={0.22} depthWrite={false} />
-  </lineSegments>;
+  return (
+    <lineSegments geometry={geometry} position={[0, 0, 0]}>
+      <lineBasicMaterial color="#00f2fe" transparent opacity={0.28} depthWrite={false} />
+    </lineSegments>
+  );
 }
 
 function Dust() {
@@ -229,21 +247,20 @@ function Dust() {
     points.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.12) * 0.035;
     points.current.position.y = Math.sin(state.clock.elapsedTime * 0.25) * 0.025;
   });
-  return <points ref={points} geometry={geometry}>
-    <pointsMaterial color="#C8D0E6" size={0.014} transparent opacity={0.42} sizeAttenuation depthWrite={false} />
-  </points>;
+  return (
+    <points ref={points} geometry={geometry}>
+      <pointsMaterial color="#00f2fe" size={0.014} transparent opacity={0.45} sizeAttenuation depthWrite={false} />
+    </points>
+  );
 }
 
 function StudioFloor() {
   return (
     <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.29, 0]} receiveShadow>
-        <planeGeometry args={[200, 200]} />
-        <meshStandardMaterial color="#10131a" roughness={0.34} metalness={0.22} />
-      </mesh>
+      {/* Clean holographic cyan baseline */}
       <mesh position={[0, -1.282, 0.22]}>
         <boxGeometry args={[3.15, 0.006, 0.012]} />
-        <meshBasicMaterial color="#E8EAF2" transparent opacity={0.22} />
+        <meshBasicMaterial color="#00f2fe" transparent opacity={0.35} />
       </mesh>
     </group>
   );
@@ -258,16 +275,16 @@ function Scene() {
   });
   return (
     <>
-      <ambientLight intensity={0.85} />
-      <directionalLight position={[3, 5, 4]} intensity={2.5} color="#f5eee0" />
-      <directionalLight position={[3, 1, -3]} intensity={1.15} color="#D9DFEF" />
-      <pointLight ref={rim} position={[-2.8, 1.1, 2.3]} intensity={3.1} color="#E8EAF2" distance={7} />
+      <ambientLight intensity={0.95} />
+      <directionalLight position={[3, 5, 4]} intensity={2.6} color="#f5eee0" />
+      <directionalLight position={[3, 1, -3]} intensity={1.2} color="#00f2fe" />
+      <pointLight ref={rim} position={[-2.8, 1.1, 2.3]} intensity={3.1} color="#00f2fe" distance={7} />
       <pointLight position={[0.2, 0.4, 2.6]} intensity={0.65} color="#d5e2ff" distance={4} />
       <BlueprintFrame />
       <Dust />
       <RetroComputer />
       <StudioFloor />
-      <ContactShadows position={[0, -1.28, 0]} opacity={0.46} scale={5.8} blur={2.5} far={3.5} color="#000000" />
+      <ContactShadows position={[0, -1.28, 0]} opacity={0.5} scale={5.8} blur={2.5} far={3.5} color="#000000" />
     </>
   );
 }
@@ -275,8 +292,29 @@ function Scene() {
 export default function HeroScene() {
   useGlobalPointerTracking();
   return (
-    <div className="hero-scene" aria-label="A 3D recreation of a 1990s beige CRT computer with keyboard and floppy disk" role="img">
-      <Canvas camera={{ position: [0, 0.12, 6.7], fov: 36 }} dpr={[1, 1.5]} gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}>
+    <div
+      className="hero-scene"
+      aria-label="A 3D recreation of a 1990s beige CRT computer with keyboard and floppy disk"
+      role="img"
+    >
+      <Canvas
+        camera={{ position: [0, 0.12, 6.7], fov: 36 }}
+        dpr={[1, 1.5]}
+        gl={{
+          alpha: true,
+          antialias: true,
+          powerPreference: "high-performance",
+        }}
+        onCreated={({ gl, scene }) => {
+          gl.setClearColor(0x000000, 0);
+          scene.background = null;
+        }}
+        style={{ background: "transparent", pointerEvents: "auto" }}
+        onPointerMove={(e) => {
+          globalPointer.x = (e.clientX / Math.max(window.innerWidth, 1)) * 2 - 1;
+          globalPointer.y = -((e.clientY / Math.max(window.innerHeight, 1)) * 2 - 1);
+        }}
+      >
         <Scene />
       </Canvas>
     </div>
