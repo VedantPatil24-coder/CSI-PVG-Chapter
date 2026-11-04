@@ -137,8 +137,8 @@ export default function CyberBackground() {
     if (!ctx) return;
 
     // Current tuned settings
-    const lineGlowMult = 0.55;
-    const bgDensityMult = 1.05;
+    const lineGlowMult = 0.48;
+    const bgDensityMult = 0.65;
 
     // Reference virtual coordinate system (1600 x 1140 matches artwork aspect ratio)
     const REF_W = 1600;
@@ -818,9 +818,8 @@ export default function CyberBackground() {
             const distSq = dx * dx + dy * dy;
             if (distSq < 78000) {
               const prox = 1 - Math.sqrt(distSq) / 280;
-              ctx.fillStyle = `rgba(0, 210, 245, ${
-                baseGridAlpha + prox * 0.028 * bgDensityMult
-              })`;
+              ctx.fillStyle = `rgba(0, 210, 245, ${baseGridAlpha + prox * 0.028 * bgDensityMult
+                })`;
               ctx.fillRect(x, y, boxSize, boxSize);
               ctx.fillStyle = `rgba(0, 175, 235, ${baseGridAlpha})`;
             } else {

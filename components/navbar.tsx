@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Navbar,
@@ -9,7 +10,6 @@ import {
   NavItems,
   MobileNav,
   NavbarLogo,
-  NavbarButton,
   MobileNavHeader,
   MobileNavToggle,
   MobileNavMenu,
@@ -81,7 +81,7 @@ export default function AppNavbar() {
             onItemClick={handleItemClick}
           />
           <div className="flex items-center gap-2.5">
-            <a
+            <Link
               href="/"
               className="w-8 h-8 rounded-lg overflow-hidden border border-white/20 bg-white flex items-center justify-center shrink-0 hover:border-white/40 transition-colors shadow-sm"
               title="Pune Vidhyarthi Griha"
@@ -94,15 +94,7 @@ export default function AppNavbar() {
                 height={32}
                 className="w-full h-full object-contain p-0.5"
               />
-            </a>
-            <NavbarButton
-              href="https://www.instagram.com/csi_pvg/"
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="gradient"
-            >
-              Join Us
-            </NavbarButton>
+            </Link>
           </div>
         </NavBody>
 
@@ -148,18 +140,6 @@ export default function AppNavbar() {
                 </a>
               );
             })}
-            <div className="flex w-full flex-col gap-3 mt-3 pt-3 border-t border-white/10">
-              <NavbarButton
-                href="https://www.instagram.com/csi_pvg/"
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="gradient"
-                className="w-full text-center py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Join Us
-              </NavbarButton>
-            </div>
           </MobileNavMenu>
         </MobileNav>
       </Navbar>

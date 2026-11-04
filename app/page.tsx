@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import Navbar from "@/components/navbar";
 import Hero from "@/components/hero";
 import AboutSection from "@/components/about-section";
@@ -11,10 +12,12 @@ export default function Home() {
       <div id="home"><Hero /></div>
       <AboutSection />
       <footer className="site-footer home-footer section-shell">
-        <a className="brand footer-brand" href="/">
-          <span className="brand-logo-wrap footer-logo-wrap"><Image src="/images/csi-final-logo.jpeg" alt="CSI PVG Chapter logo" width={48} height={48} className="brand-logo" /></span>
+        <Link className="brand footer-brand" href="/">
+          <span className="brand-logo-wrap footer-logo-wrap">
+            <Image src="/images/csi-final-logo.jpeg" alt="CSI PVG Chapter logo" width={48} height={48} className="brand-logo" />
+          </span>
           <span className="brand-type"><strong>CSI<span>·</span>PVG</strong><small>CHAPTER</small></span>
-        </a>
+        </Link>
         <p>Curiosity into capability. Ideas into impact.</p>
         <aside className="footer-contact" aria-label="Contact CSI–PVG">
           <span className="footer-contact-title">CONTACT</span>
