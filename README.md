@@ -1,53 +1,164 @@
-# CSI–PVG Chapter website starter
+# CSI–PVG Student Chapter Website
 
-A dark, premium retro-computing starter homepage for the CSI–PVG Chapter technical community. Built with Next.js App Router, TypeScript, Tailwind CSS v4, Motion, shadcn-style local button components, Lucide React and React Three Fiber.
+The official digital presence of the **Computer Society of India (CSI) – PVG Student Chapter**, PVG's College of Engineering and Technology, Pune.
 
-## Requirements
+A platform built to connect students through technology, innovation, collaboration, and community-driven learning.
 
-- Node.js 20.9+ (recommended: current LTS)
+## Overview
+
+The CSI–PVG Student Chapter website serves as a central platform for showcasing the chapter's activities, technical initiatives, events, projects, and community.
+
+Designed with a modern, dark retro-computing aesthetic, the website combines interactive 3D elements, responsive layouts, and subtle animations to create an engaging digital experience.
+
+## Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| Next.js (App Router) | Frontend framework |
+| TypeScript | Type safety |
+| Tailwind CSS v4 | Styling |
+| Motion | Animations and interactions |
+| React Three Fiber | 3D rendering |
+| Three.js | 3D graphics |
+| Lucide React | Icons |
+| shadcn-style components | Reusable UI components |
+
+## Features
+
+- **Interactive Hero Section:** Custom 3D recreation of a 1990s CRT workstation.
+- **Responsive Design:** Optimized layouts and navigation for desktop, tablet, and mobile devices.
+- **About the Chapter:** Introduction, vision, and mission.
+- **Technical Domains:** Explore different areas of technology and development.
+- **Projects:** Showcase innovative ideas and student-led projects.
+- **Events:** Discover chapter events, workshops, and technical activities.
+- **Community:** Information about joining and participating in the chapter.
+- **Animations:** Smooth transitions, subtle motion effects, and interactive elements.
+- **Accessibility:** Reduced-motion support and CSS fallbacks for the 3D experience.
+
+## Getting Started
+
+### Prerequisites
+
+Make sure you have the following installed:
+
+- Node.js 20.9 or later
 - npm
-- VS Code (recommended)
+- Git
 
-## Run locally
+### Installation
+
+**1. Clone the repository**
+
+```bash
+git clone https://github.com/VedantPatil24-coder/CSI-PVG-Chapter.git
+```
+
+**2. Navigate to the project directory**
+
+```bash
+cd CSI-PVG-Chapter/csi-pvg-chapter
+```
+
+**3. Install dependencies**
 
 ```bash
 npm install
+```
+
+**4. Start the development server**
+
+```bash
 npm run dev
 ```
 
-Open http://localhost:3000.
+**5. Open the website**
 
-## Build for production
+Visit [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Production Build
+
+To create an optimized production build:
 
 ```bash
 npm run build
+```
+
+To run the production server locally:
+
+```bash
 npm start
 ```
 
-## What's included
+## Deployment
 
-- Responsive homepage and mobile navigation
-- Hero with a custom 3D 1990s CRT workstation scene
-- Technical domains bento-style grid
-- Project concept cards
-- Events section
-- Community and join sections
-- Reduced-motion CSS support
-- Local reusable button component and `cn()` utility
+The website is deployed using **Vercel**.
 
-## Important content to replace before launch
+The GitHub repository can be connected to Vercel for continuous deployment. New changes pushed to the configured production branch can automatically trigger a new deployment.
 
-This is a visual starter, not an official chapter publication. Replace the sample project concepts, tentative event names, generic GitHub destination and `chapter@example.com` with verified CSI–PVG information. Add the official logo, social links, team names, approved chapter description and actual event registration URLs.
+## Project Structure
 
-## Notes
+```text
+csi-pvg-chapter/
+├── public/              # Static assets and images
+├── src/
+│   ├── app/             # Next.js App Router
+│   ├── components/      # Reusable UI components
+│   └── lib/             # Utility functions
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+└── README.md
+```
 
-- The 3D hero uses WebGL. If a device cannot render it, a CSS fallback orb is shown while the scene loads; you can extend this with a full static poster if needed.
-- shadcn/ui is a component-copying workflow. This starter includes a small local button component styled in that spirit, rather than importing the entire shadcn library. You can initialize the official CLI later and add components as needed.
-- React Bits and Magic UI are optional. The starter deliberately uses custom components first, so no paid component catalog is required.
+*The directory structure above represents the main application organization.*
 
+## Design Philosophy
 
-## Visual direction
+The website follows a retro-computing-inspired visual direction, combining:
 
-The current direction uses a charcoal/graphite base, restrained signal-blue accents, warm CRT beige and bold sans-serif typography. The hero features a custom Three.js recreation of a 1990s CRT workstation with keyboard, mouse and floppy disk. The scene includes subtle pointer parallax, slow product-style motion, a scan-lined blue terminal display, studio lighting, a restrained drafting frame, sparse dust particles, a floor plane and contact shadows. The visual effects are intentionally low-saturation rather than neon.
+- Charcoal and graphite backgrounds.
+- Restrained signal-blue accents.
+- Warm CRT-inspired beige tones.
+- Bold typography.
+- Interactive 3D elements.
+- Minimal, purposeful animations.
 
-The blue accent is a design choice, not an official CSI brand color. Replace it with approved chapter branding if needed.
+The design aims to balance nostalgia with a contemporary technical identity.
+
+## Contributing
+
+Contributions, suggestions, and improvements are welcome.
+
+1. Fork the repository.
+2. Create a new branch.
+
+```bash
+git checkout -b feature/your-feature-name
+```
+
+3. Make your changes.
+4. Commit your changes.
+
+```bash
+git add .
+git commit -m "Add: your feature description"
+```
+
+5. Push your branch.
+
+```bash
+git push origin feature/your-feature-name
+```
+
+6. Open a Pull Request for review.
+
+## Acknowledgements
+
+Built and maintained for the CSI–PVG Student Chapter community.
+
+**Computer Society of India – PVG Student Chapter**  
+PVG's College of Engineering and Technology, Pune.
+
+---
+
+*Connecting learning, innovation, and industry.*
