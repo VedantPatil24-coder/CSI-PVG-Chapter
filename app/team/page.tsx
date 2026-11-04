@@ -11,7 +11,7 @@ type LeadershipMember = TeamMember & { teamHref?: string };
 
 const faculty: LeadershipMember[] = [
   { name: "Prof. Urmila Kalshetti", role: "HOD (Computer Department)", detail: "Computer Department • Staff", image: "/team/urmila_kalshetti.jpeg", linkedin: "https://www.linkedin.com/in/urmila-kalshetti-3507669a/" },
-  { name: "Prof. Aakanksha Mishra Tripathi", role: "Faculty Coordinator", detail: "Computer Department • Staff", image: "/team/aakanksha_mishra_tripathi.jpeg", linkedin: "https://www.linkedin.com/in/akansha-mishra-22783825/" },
+  { name: "Prof. Akansha Mishra Tripathi", role: "Faculty Coordinator", detail: "Computer Department • Staff", image: "/team/aakanksha_mishra_tripathi.jpeg", linkedin: "https://www.linkedin.com/in/akansha-mishra-22783825/" },
 ];
 
 const executive: LeadershipMember[] = [
