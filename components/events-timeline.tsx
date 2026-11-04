@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { ArrowUpRight, CalendarDays, Code2, Lightbulb, Monitor, Rocket, Terminal, Users, Wrench } from "lucide-react";
+import { ArrowUpRight, CalendarDays, Lightbulb, Monitor, Rocket, Terminal, Users, Wrench } from "lucide-react";
 
 const events = [
   { number: "00", date: "24TH AUGUST", title: "INAUGURATION", description: "Official inauguration of the CSI–PVG Student Chapter. Bringing students together to turn engineering knowledge into practical technology leadership.", icon: CalendarDays, status: "CHAPTER MILESTONE" },

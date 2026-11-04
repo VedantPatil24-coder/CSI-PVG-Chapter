@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Linkedin } from "lucide-react";
 import Navbar from "@/components/navbar";
-import TeamMemberCard from "@/components/team-member-card";
-import { departmentTeams, type TeamMember } from "@/lib/team-data";
+import { type TeamMember } from "@/lib/team-data";
+
 
 export const metadata = { title: "Team | CSI–PVG Chapter" };
 
