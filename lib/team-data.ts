@@ -38,7 +38,7 @@ export const departmentTeams: DepartmentTeam[] = [
     title: "Event & Publicity Team",
     description: "The team bringing our events to life and our community together.",
     members: [
-      { name: "Sagar More", role: "Event & Publicity Team Member", detail: "Computer Department • S.Y", image: "/team/sagar_more.jpeg", linkedin: "https://www.linkedin.com/in/sagar-more-013386342?utm_source=share_via&utm_content=profile&utm_medium=member_android" },
+      { name: "Sagar More", role: "Event & Publicity Team Member", detail: "Computer Department • TE", image: "/team/sagar_more.jpeg", linkedin: "https://www.linkedin.com/in/sagar-more-013386342?utm_source=share_via&utm_content=profile&utm_medium=member_android" },
       { name: "Nihar Gokhale", role: "Event & Publicity Team Member", detail: "Computer Department • S.Y", image: "/team/nihar_gokhale.jpeg" },
       { name: "Yaseen Husaini", role: "Event & Publicity Team Member", detail: "Computer Department • S.Y", image: "/team/yaseen_husaini.jpeg", linkedin: "https://www.linkedin.com/in/yaseenhusaini" },
       { name: "Janhvi Chauhan", role: "Event & Publicity Team Member", detail: "Computer Department • S.Y", image: "/team/janhvi_chauhan.jpeg", linkedin: "https://www.linkedin.com/in/janhavi-chauhan-4609a1379?utm_source=share_via&utm_content=profile&utm_medium=member_android" },
