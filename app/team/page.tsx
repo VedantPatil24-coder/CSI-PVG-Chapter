@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Linkedin } from "lucide-react";
 import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 import { type TeamMember } from "@/lib/team-data";
 
 
@@ -81,10 +82,10 @@ export default function TeamPage() {
           {heads.map((group) => <LeadershipGroup key={group.href} title={group.title} members={group.members} />)}
         </div>
       </section>
-      <footer className="site-footer section-shell">
-        <p>Curiosity into capability. Ideas into impact.</p>
-        <span className="footer-copyright">© {new Date().getFullYear()} CSI–PVG STUDENT CHAPTER</span>
-      </footer>
+      <Footer />
+
+
+
     </main>
   );
 }
